@@ -1,0 +1,134 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{algpseudocode}
+\usepackage[margin=0.60in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\pagestyle{fancy}
+\fancyhead[RO]{Ferrulli Massimiliano}
+\fancyfoot{}
+
+\usepackage{titling}
+\setlength{\droptitle}{-1.5cm}
+
+\newcommand{\Lim}[1]{\raisebox{0.5ex}{\scalebox{0.8}{$\displaystyle \lim_{#1}\;$}}}
+
+\SetKwInput{KwData}{Input}
+\SetKwInput{KwResult}{Output}
+\RestyleAlgo{ruled}
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    pdftitle={1},
+    pdfpagemode=FullScreen,
+}
+
+\title{Documentation for Project Sinussum}
+\author{Ferrulli Massimiliano}
+\date{}
+
+
+
+\begin{document}
+
+\maketitle
+
+\section{Outcome of the analysis phase}
+After creating a matrix filled with spaces, labeled as "empty\_matrix", I fill the time axis with the char "." . This is possible with the function "assign\_time\_axe" that calls "time\_index\_i", this last function determines the row index
+i at which the time axis should be inserted into the matrix. Then, based on the signal input, "matrix\_chosen" determines which theoretical values needs to be computed by calling one of the three theoretical functions (\underline{SIGNAL}\_theory\footnote{The underlined word \underline{SIGNAL} is used to not repeat the three signals, SQUARE,TRIANGLE and SAWTOOTH.}).
+These three functions are responsible for computing values for each cell along the temporal axis and assigning them to the input matrix using the '+' character. The same steps are done to calculated the approximated values but the assigned character is '*', the functions I use for this part are "functions\_approx", "approximated\_matrix\_chosen", "value\_\underline{SIGNAL}\_approx". 
+The function that returns the row index i for every calculated value is "row\_index". In order to print the graph on the terminal, every element of the matrix are printed row by row using "print", the horizontal bars are printed with "print\_bars". 
+For the dichotomic research of the maximum a function called "time\_dichotomy" returns a vector containing in the first slot the t\_start and in the second the t\_finish, based on the signal input. The dichotomic research is made by using the iterative function "max\_dicho\_research" which selects, every iterations, in which side of the graph the research must continue.
+
+
+
+
+
+\section{Order of complexity of task 2}
+All "TYPE\_theory" functions exhibit complexity $O(nbC) = O(nbL)$ ($nbC = 2 \cdot nbL - 1$). "functions\_approx" has complexity $O(nbL \cdot nbN)$ due to its for loop, which increments t from tmin to tmax with delta\_t, requiring nbC iterations ($O(nbL)$). Within this loop, the "approximated\_matrix\_chosen" function is invoked with a complexity of $O(nbN)$ based on the sum of the fourier's formulas. The "print" function has a complexity $O(nbL^2)$ due to the two for loops, the final complexity is $O(nbL \cdot nbN ) + O(nbL^2) $. The bigger terms between $nbN$ and $nbL$ will determinate which of the two sides of the sum will be the complexity.  
+\section{Pseudocode for the dichotomic research of the maximum for the signal SQUARE (2nd Page) }
+%
+%\begin{algorithm}
+%    \caption{Maximum research for SQUARE}\label{alg:two}
+%    \KwData{$a,b,\varepsilon, nbN$}
+%    \KwResult{$\text{Max\_Square}_\text{approx}$}
+%    $c \gets 0$\\
+%    $c_\text{previous} \gets 0$\\
+%    %$N \gets n$\;
+%    \While{$|f(c) - f(c_\text{previous})| \geq \varepsilon$}{
+%      \vspace{2mm}
+%      $c_\text{previous} \gets c$ \\
+%      $c \gets \frac{a+b}{2}$\\
+%      $f(a) \gets \text{value\_square\_approx}(a,nbN)  $ \\
+%      $f(t_{finish}) \gets \text{value\_square\_approx}(b,nbN)  $ \\
+%      $f(c) \gets \text{value\_square\_approx}(c,nbN)  $ \\
+%      $f(c_\text{previous}) \gets \text{value\_square\_approx}(c_\text{previous},nbN) $ \\
+%      \vspace{2mm}
+%      \eIf{$f(c) < f(a) \, and \,  f(c) > f(t_{finish}) $}{
+%        $b \gets c$ \Comment*[r]{This is a comment}
+%      }
+%      \eIf{$N$ is odd}{
+%          $y \gets y \times X$\;
+%          $N \gets N - 1$\;
+%      }
+%    }
+%   \end{algorithm}
+
+
+
+\begin{algorithm}
+    \DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+    %\KwIn{$t_{start},t_{finish},\varepsilon, nbN$  where $t_{start},t_{finish} \in \mathbb{R}^+$ \, , \, $a < b$ \, , \, $\varepsilon , nbN \in \mathbb{N^*}$ }
+    \KwIn{$t_{start},t_{finish},\varepsilon \, $ three decimal numbers, where: $t_{start} < t_{finish}$  ,  $\varepsilon \in \mathbb{R}^+ $ \, and \, $t_{start},t_{finish} \geq 0$ , an integer $ nbN > 0$}
+    \KwOut{The maximum value approximated for the function SQUARE \\ \hspace{18mm}in the interval $\{t_{start},t_{finish}\}$ }
+    $c \gets 0$\\
+    \While{$|f(c) - f(c_\text{previous})| \geq \varepsilon$}{
+      \vspace{1.5mm}
+      $c_\text{previous} \gets c$ \\
+      $c \gets \frac{t_{start}+t_{finish}}{2}$\\
+      $f(t_{start}) \gets \text{value\_square\_approx}(t_{start},nbN)  $ \\
+      $f(t_{finish}) \gets \text{value\_square\_approx}(t_{finish},nbN)  $ \\
+      $f(c) \gets \text{value\_square\_approx}(c,nbN)  $ \\
+      $f(c_\text{previous}) \gets \text{value\_square\_approx}(c_\text{previous},nbN) $ \\
+      \vspace{2mm}
+      % The "u" before the "If" makes it so there is no "end" after the statement, so the else will then follow
+      \uIf{$f(c) < f(t_{start}) \, and \,  f(c) > f(t_{finish}) $}{
+        $t_{finish} \gets c$
+      }
+      \uIf{$f(c) > f(t_{start}) \, and \,  f(c) < f(t_{finish}) $}{
+        $t_{start} \gets c$
+      }
+      \uIf{$ (f(c) < f(t_{start}) \, and \,  f(c) < f(t_{finish})) \, \,  or \, \, (f(c) > f(t_{start}) \, and \,  f(c) > f(t_{finish}))  $}{
+         \uIf{$f(t_{finish}) < f(t_{start}) $}{
+            $t_{finish} \gets c$
+         } 
+         \uIf{$f(t_{finish}) > f(t_{start}) $}{
+            $t_{start} \gets c$
+         }        
+      }
+      \uIf{$(f(c) = f(t_{start}) )  \, \,  or \, \, (f(c) = f(t_{finish})) $}{
+        \uIf{$f(t_{finish}) < f(t_{start}) $}{
+           $t_{finish} \gets c$
+        } 
+        \uIf{$f(t_{finish}) > f(t_{start}) $}{
+           $t_{start} \gets c$
+        }        
+     }
+    }
+    \Return{f(c)}
+    \caption{{Max dicho research}}
+    \label{algo:duplicate}
+    \end{algorithm}
+
+\section{Behaviour for $ \Lim{nbN \to \infty}$   }
+While increasing nbN I notice that for the approximated maximum for the signal TRIANGLE tends to 1 while for SQUARE and SAWTOOTH the maximum tends\footnotetext{For SQUARE 1.17897974, for SAWTOOTH 1.17897874} to 1.17897 (value obtained with $nbN = 10^6$ and $nbN = 10^7$) 
+\end{document}
